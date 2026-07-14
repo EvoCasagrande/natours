@@ -1,30 +1,16 @@
 const Tour = require('../models/tourModel');
-
-class APIFeatures {
-    constructor(query, queryString) {
-        this.query = query;
-        this.queryString = queryString;
-    }
-
-    filter() {
-        const queryObj = { ...this.queryString };
-        const excludedFields = ['page', 'sort', 'limit', 'fields'];
-        excludedFields.forEach(el => delete queryObj[el])
-
-
-        let queryStr = JSON.stringify(queryObj);
-        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-        this.query = this.query.find(JSON.parse(queryStr));
-        return this;
-    }
-
-
-}
+const APIFeatures = require('../utils/apiFeatures');
 
 exports.getAllTours = async (req, res) => {
-    const tours = await Tour.find();
-
     try {
+        const features = new APIFeatures(Tour.find(), req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .pagination();
+
+        const tours = await features.query;
+
         res.status(200).json({
             status: 'success',
             results: tours.length,
