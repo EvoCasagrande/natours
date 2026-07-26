@@ -1,10 +1,9 @@
 const fs = require('fs');
-const Tour = require('./../../models/tourModel');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './config.env' });
-
+const Tour = require('../../models/tourModel');
 
 mongoose
     .connect(process.env.DATABASE, {
@@ -15,8 +14,9 @@ mongoose
     .then(() => console.log('DB connection successful!'))
     .catch((err) => console.log('DB connection error:', err.message));
 
-
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8'));
+const tours = JSON.parse(
+    fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8'),
+);
 
 const importData = async () => {
     try {
@@ -26,7 +26,7 @@ const importData = async () => {
         console.log('Error importing data:', err.message);
     }
     process.exit();
-}
+};
 
 const deleteData = async () => {
     try {
@@ -36,10 +36,10 @@ const deleteData = async () => {
         console.log('Error deleting data:', err.message);
     }
     process.exit();
-}
+};
 
-if(process.argv[2] === '--import') {
+if (process.argv[2] === '--import') {
     importData();
-} else if(process.argv[2] === '--delete') {
+} else if (process.argv[2] === '--delete') {
     deleteData();
 }
