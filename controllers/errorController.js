@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 const AppError = require('../utils/appError');
 
-
 // Handlers
 const handleCastErrorDB = (err) => {
     const message = `Invalid ${err.path}: ${err.value}.`;
