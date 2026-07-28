@@ -87,6 +87,7 @@ const tourSchema = new mongoose.Schema(
 );
 
 //VIRTUAL PROPERTIES
+// Returns duration in weeks
 tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
 });
@@ -104,7 +105,7 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 //AGGREGATION MIDDLEWARE
-tourSchema.pre('aggregate', (next) => {
+tourSchema.pre('aggregate', function (next) {
     this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
     next();
 });
